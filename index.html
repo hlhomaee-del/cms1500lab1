@@ -156,7 +156,7 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
 .cms-field input,.cms-field select{width:100%;padding:7px 10px;border:1px solid var(--bdr);border-radius:4px;font-family:var(--mn);font-size:12px;transition:.2s}
 .cms-field input:focus,.cms-field select:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px rgba(21,101,192,.12)}
 .cms-field .tip{display:none;position:absolute;top:100%;left:0;right:0;background:var(--priL);border:1px solid #90CAF9;border-radius:4px;padding:6px 10px;font-size:11px;color:var(--pri2);z-index:10;margin-top:2px;box-shadow:var(--shd)}
-.cms-field:focus-within .tip{display:block}
+.cms-field:focus-within .tip{display:none!important}
 
 /* Item 21 Diagnosis Area */
 .dx-grid{display:grid;grid-template-columns:40px 1fr;gap:4px;align-items:center}
@@ -261,6 +261,18 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
   .pt-info{grid-template-columns:1fr}
   .nav-btn{padding:8px 10px;font-size:11px}
 }
+
+
+/* ===== UNBIASED QUIZ + NO LIVE CMS HINTS PATCH ===== */
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));align-items:stretch}
+.opt{width:100%;min-height:48px;display:flex;align-items:center;justify-content:flex-start;text-align:left;line-height:1.35}
+.cms-field .tip,.cms-field:focus-within .tip{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+.answer-key-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px;background:#fff}
+.answer-key-table th{background:var(--pri2);color:#fff;padding:7px;text-align:left}
+.answer-key-table td{border:1px solid var(--bdr);padding:7px;vertical-align:top}
+.answer-key-table td:nth-child(2){font-family:var(--mn);font-weight:700;color:var(--grn2)}
+.correct-answer-note{margin-top:8px;font-weight:700;color:var(--grn2)}
+
 </style>
 </head>
 <body>
@@ -352,10 +364,10 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
     <h4>🧠 Prior Knowledge Check</h4>
     <p style="margin-bottom:10px;font-size:13px;color:var(--tx2)">Before we review — which code set do you think supports <strong>medical necessity</strong> on a claim?</p>
     <div class="opts">
-      <button class="opt" onclick="chk(this,true,'q1pk','Correct! ICD-10-CM diagnosis codes explain WHY the service was medically necessary.')">ICD-10-CM</button>
-      <button class="opt" onclick="chk(this,false,'q1pk','Not quite. CPT describes WHAT was done, not WHY it was needed.')">CPT</button>
-      <button class="opt" onclick="chk(this,false,'q1pk','Not quite. HCPCS Level II covers supplies and specific services, not the reason for the visit.')">HCPCS Level II</button>
-      <button class="opt" onclick="chk(this,false,'q1pk','Not quite. ICD-10-PCS is only for inpatient hospital procedures.')">ICD-10-PCS</button>
+      <button class="opt" onclick="chk(this,true,'q1pk','Correct! ICD-10-CM diagnosis codes explain WHY the service was medically necessary.')">ICD-10-CM diagnosis set</button>
+      <button class="opt" onclick="chk(this,false,'q1pk','Not quite. CPT describes WHAT was done, not WHY it was needed.')">CPT procedure code set</button>
+      <button class="opt" onclick="chk(this,false,'q1pk','Not quite. HCPCS Level II covers supplies and specific services, not the reason for the visit.')">HCPCS Level II supply set</button>
+      <button class="opt" onclick="chk(this,false,'q1pk','Not quite. ICD-10-PCS is only for inpatient hospital procedures.')">ICD-10-PCS inpatient set</button>
     </div>
     <div class="fb" id="q1pk-fb"></div>
   </div>
@@ -391,9 +403,9 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
   <div class="quiz" id="q1a">
     <h4>Concept Check 1: Which code set represents the SERVICE performed?</h4>
     <div class="opts">
-      <button class="opt" onclick="chk(this,false,'q1a','ICD-10-CM represents the diagnosis, not the service.')">ICD-10-CM</button>
-      <button class="opt" onclick="chk(this,true,'q1a','Correct! CPT codes represent the procedures and services performed by the provider.')">CPT</button>
-      <button class="opt" onclick="chk(this,false,'q1a','HCPCS Level II covers supplies and specific items, though it does represent some services.')">HCPCS Level II</button>
+      <button class="opt" onclick="chk(this,false,'q1a','ICD-10-CM represents the diagnosis, not the service.')">ICD-10-CM diagnosis set</button>
+      <button class="opt" onclick="chk(this,true,'q1a','Correct! CPT codes represent the procedures and services performed by the provider.')">CPT procedure code set</button>
+      <button class="opt" onclick="chk(this,false,'q1a','HCPCS Level II covers supplies and specific items, though it does represent some services.')">HCPCS Level II supply set</button>
     </div>
     <div class="fb" id="q1a-fb"></div>
   </div>
@@ -401,9 +413,9 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
   <div class="quiz" id="q1b">
     <h4>Concept Check 2: Which code set is ONLY for hospital inpatient procedures?</h4>
     <div class="opts">
-      <button class="opt" onclick="chk(this,false,'q1b','CPT is for professional/physician services in any setting.')">CPT</button>
-      <button class="opt" onclick="chk(this,false,'q1b','ICD-10-CM is for diagnoses, not procedures.')">ICD-10-CM</button>
-      <button class="opt" onclick="chk(this,true,'q1b','Correct! ICD-10-PCS is exclusively for coding inpatient hospital procedures.')">ICD-10-PCS</button>
+      <button class="opt" onclick="chk(this,false,'q1b','CPT is for professional/physician services in any setting.')">CPT procedure code set</button>
+      <button class="opt" onclick="chk(this,false,'q1b','ICD-10-CM is for diagnoses, not procedures.')">ICD-10-CM diagnosis set</button>
+      <button class="opt" onclick="chk(this,true,'q1b','Correct! ICD-10-PCS is exclusively for coding inpatient hospital procedures.')">ICD-10-PCS inpatient set</button>
     </div>
     <div class="fb" id="q1b-fb"></div>
   </div>
@@ -411,9 +423,9 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
   <div class="quiz" id="q1c">
     <h4>Concept Check 3: A patient receives a nebulizer machine at home. Which code set covers this?</h4>
     <div class="opts">
-      <button class="opt" onclick="chk(this,false,'q1c','CPT covers professional services, not durable medical equipment.')">CPT</button>
-      <button class="opt" onclick="chk(this,true,'q1c','Correct! HCPCS Level II covers durable medical equipment, supplies, and items not in CPT.')">HCPCS Level II</button>
-      <button class="opt" onclick="chk(this,false,'q1c','ICD-10-CM covers diagnoses, not equipment or supplies.')">ICD-10-CM</button>
+      <button class="opt" onclick="chk(this,false,'q1c','CPT covers professional services, not durable medical equipment.')">CPT procedure code set</button>
+      <button class="opt" onclick="chk(this,true,'q1c','Correct! HCPCS Level II covers durable medical equipment, supplies, and items not in CPT.')">HCPCS Level II supply set</button>
+      <button class="opt" onclick="chk(this,false,'q1c','ICD-10-CM covers diagnoses, not equipment or supplies.')">ICD-10-CM diagnosis set</button>
     </div>
     <div class="fb" id="q1c-fb"></div>
   </div>
@@ -421,9 +433,9 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
   <div class="quiz" id="q1d">
     <h4>Concept Check 4: On a CMS-1500, diagnosis codes go in Item 21. These codes explain medical necessity. They come from which code set?</h4>
     <div class="opts">
-      <button class="opt" onclick="chk(this,true,'q1d','Correct! ICD-10-CM diagnosis codes in Item 21 explain WHY the services were medically necessary.')">ICD-10-CM</button>
-      <button class="opt" onclick="chk(this,false,'q1d','CPT codes go in Item 24D for procedures — not Item 21.')">CPT</button>
-      <button class="opt" onclick="chk(this,false,'q1d','ICD-10-PCS is for inpatient facility coding only.')">ICD-10-PCS</button>
+      <button class="opt" onclick="chk(this,true,'q1d','Correct! ICD-10-CM diagnosis codes in Item 21 explain WHY the services were medically necessary.')">ICD-10-CM diagnosis set</button>
+      <button class="opt" onclick="chk(this,false,'q1d','CPT codes go in Item 24D for procedures — not Item 21.')">CPT procedure code set</button>
+      <button class="opt" onclick="chk(this,false,'q1d','ICD-10-PCS is for inpatient facility coding only.')">ICD-10-PCS inpatient set</button>
     </div>
     <div class="fb" id="q1d-fb"></div>
   </div>
@@ -458,10 +470,10 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
     <h4>Sort This: Which SOAP category does this belong to?</h4>
     <p style="font-size:14px;font-style:italic;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:var(--r)">"Patient reports sore throat for 3 days, difficulty swallowing, and low-grade fever."</p>
     <div class="opts">
-      <button class="opt" onclick="chk(this,true,'q2a','Correct! This is Subjective — the patient is reporting their own symptoms and history.')">S – Subjective</button>
-      <button class="opt" onclick="chk(this,false,'q2a','Objective is what the provider observes/measures, not what the patient reports.')">O – Objective</button>
-      <button class="opt" onclick="chk(this,false,'q2a','Assessment is the provider\'s diagnosis, not the patient\'s report.')">A – Assessment</button>
-      <button class="opt" onclick="chk(this,false,'q2a','Plan is the treatment approach, not the patient\'s complaints.')">P – Plan</button>
+      <button class="opt" onclick="chk(this,true,'q2a','Correct! This is Subjective — the patient is reporting their own symptoms and history.')">S – Subjective section</button>
+      <button class="opt" onclick="chk(this,false,'q2a','Objective is what the provider observes/measures, not what the patient reports.')">O – Objective section</button>
+      <button class="opt" onclick="chk(this,false,'q2a','Assessment is the provider\'s diagnosis, not the patient\'s report.')">A – Assessment section</button>
+      <button class="opt" onclick="chk(this,false,'q2a','Plan is the treatment approach, not the patient\'s complaints.')">P – Plan section</button>
     </div>
     <div class="fb" id="q2a-fb"></div>
   </div>
@@ -470,10 +482,10 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
     <h4>Sort This: Which SOAP category?</h4>
     <p style="font-size:14px;font-style:italic;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:var(--r)">"Throat is erythematous with tonsillar exudate. Rapid strep test positive. Temp 101.2°F."</p>
     <div class="opts">
-      <button class="opt" onclick="chk(this,false,'q2b','Subjective is the patient\'s own report — this is provider observation.')">S – Subjective</button>
-      <button class="opt" onclick="chk(this,true,'q2b','Correct! These are measurable findings from the provider\'s examination and tests — Objective data.')">O – Objective</button>
-      <button class="opt" onclick="chk(this,false,'q2b','Assessment is the diagnosis conclusion, not the raw findings.')">A – Assessment</button>
-      <button class="opt" onclick="chk(this,false,'q2b','Plan is treatment, not examination findings.')">P – Plan</button>
+      <button class="opt" onclick="chk(this,false,'q2b','Subjective is the patient\'s own report — this is provider observation.')">S – Subjective section</button>
+      <button class="opt" onclick="chk(this,true,'q2b','Correct! These are measurable findings from the provider\'s examination and tests — Objective data.')">O – Objective section</button>
+      <button class="opt" onclick="chk(this,false,'q2b','Assessment is the diagnosis conclusion, not the raw findings.')">A – Assessment section</button>
+      <button class="opt" onclick="chk(this,false,'q2b','Plan is treatment, not examination findings.')">P – Plan section</button>
     </div>
     <div class="fb" id="q2b-fb"></div>
   </div>
@@ -482,10 +494,10 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
     <h4>Sort This: Which SOAP category?</h4>
     <p style="font-size:14px;font-style:italic;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:var(--r)">"Acute streptococcal pharyngitis."</p>
     <div class="opts">
-      <button class="opt" onclick="chk(this,false,'q2c','Subjective is patient-reported symptoms.')">S</button>
-      <button class="opt" onclick="chk(this,false,'q2c','Objective is measurable data, not the diagnosis.')">O</button>
-      <button class="opt" onclick="chk(this,true,'q2c','Correct! This is the Assessment — the provider\'s confirmed diagnosis. This is what the coder codes.')">A – Assessment</button>
-      <button class="opt" onclick="chk(this,false,'q2c','Plan is treatment, not the diagnosis.')">P</button>
+      <button class="opt" onclick="chk(this,false,'q2c','Subjective is patient-reported symptoms.')">S – Subjective section</button>
+      <button class="opt" onclick="chk(this,false,'q2c','Objective is measurable data, not the diagnosis.')">O – Objective section</button>
+      <button class="opt" onclick="chk(this,true,'q2c','Correct! This is the Assessment — the provider\'s confirmed diagnosis. This is what the coder codes.')">A – Assessment section</button>
+      <button class="opt" onclick="chk(this,false,'q2c','Plan is treatment, not the diagnosis.')">P – Plan section</button>
     </div>
     <div class="fb" id="q2c-fb"></div>
   </div>
@@ -494,10 +506,10 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
     <h4>Sort This: Which SOAP category?</h4>
     <p style="font-size:14px;font-style:italic;margin-bottom:10px;padding:10px;background:var(--bg);border-radius:var(--r)">"Prescribe amoxicillin 500mg TID x 10 days. Follow up in 2 weeks if symptoms persist."</p>
     <div class="opts">
-      <button class="opt" onclick="chk(this,false,'q2d','This is treatment, not the patient\'s report.')">S</button>
-      <button class="opt" onclick="chk(this,false,'q2d','This is a treatment decision, not an exam finding.')">O</button>
-      <button class="opt" onclick="chk(this,false,'q2d','This is a plan of action, not the diagnosis.')">A</button>
-      <button class="opt" onclick="chk(this,true,'q2d','Correct! Prescriptions, follow-up instructions, and referrals are part of the Plan.')">P – Plan</button>
+      <button class="opt" onclick="chk(this,false,'q2d','This is treatment, not the patient\'s report.')">S – Subjective section</button>
+      <button class="opt" onclick="chk(this,false,'q2d','This is a treatment decision, not an exam finding.')">O – Objective section</button>
+      <button class="opt" onclick="chk(this,false,'q2d','This is a plan of action, not the diagnosis.')">A – Assessment section</button>
+      <button class="opt" onclick="chk(this,true,'q2d','Correct! Prescriptions, follow-up instructions, and referrals are part of the Plan.')">P – Plan section</button>
     </div>
     <div class="fb" id="q2d-fb"></div>
   </div>
@@ -516,10 +528,10 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
   <div class="quiz" id="q2e">
     <h4>From the SOAP note above: What is the confirmed diagnosis the coder should code?</h4>
     <div class="opts">
-      <button class="opt" onclick="chk(this,false,'q2e','Persistent cough is a symptom the patient reported (Subjective), not the provider\'s diagnosis.')">Persistent cough</button>
-      <button class="opt" onclick="chk(this,false,'q2e','Shortness of breath is a symptom, not the confirmed diagnosis.')">Shortness of breath</button>
-      <button class="opt" onclick="chk(this,true,'q2e','Correct! New-onset asthma is the confirmed diagnosis from the Assessment section. This is what the coder codes.')">New-onset asthma</button>
-      <button class="opt" onclick="chk(this,false,'q2e','Bilateral wheezing is an Objective finding, not the diagnosis.')">Bilateral wheezing</button>
+      <button class="opt" onclick="chk(this,false,'q2e','Persistent cough is a symptom the patient reported (Subjective), not the provider\'s diagnosis.')">Persistent cough symptom</button>
+      <button class="opt" onclick="chk(this,false,'q2e','Shortness of breath is a symptom, not the confirmed diagnosis.')">Shortness of breath symptom</button>
+      <button class="opt" onclick="chk(this,true,'q2e','Correct! New-onset asthma is the confirmed diagnosis from the Assessment section. This is what the coder codes.')">New-onset asthma diagnosis</button>
+      <button class="opt" onclick="chk(this,false,'q2e','Bilateral wheezing is an Objective finding, not the diagnosis.')">Bilateral wheezing exam finding</button>
     </div>
     <div class="fb" id="q2e-fb"></div>
   </div>
@@ -573,9 +585,9 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
   <div class="quiz" id="q3a">
     <h4>Scenario: A patient presents with chest pain. The provider does an EKG and chest X-ray. Assessment says: "Chest pain, unspecified. Rule out cardiac etiology." What does the coder code as the diagnosis?</h4>
     <div class="opts">
-      <button class="opt" onclick="chk(this,false,'q3a','In outpatient coding, you do NOT code &quot;rule out&quot; conditions as if they are confirmed.')">Cardiac disease</button>
-      <button class="opt" onclick="chk(this,true,'q3a','Correct! Since no confirmed diagnosis was established, the coder codes the SYMPTOM — chest pain. You do not code &quot;rule out&quot; conditions in outpatient.')">Chest pain (the symptom)</button>
-      <button class="opt" onclick="chk(this,false,'q3a','EKG is a procedure (CPT), not a diagnosis code.')">EKG procedure</button>
+      <button class="opt" onclick="chk(this,false,'q3a','In outpatient coding, you do NOT code &quot;rule out&quot; conditions as if they are confirmed.')">Cardiac disease rule-out condition</button>
+      <button class="opt" onclick="chk(this,true,'q3a','Correct! Since no confirmed diagnosis was established, the coder codes the SYMPTOM — chest pain. You do not code &quot;rule out&quot; conditions in outpatient.')">Chest pain documented symptom</button>
+      <button class="opt" onclick="chk(this,false,'q3a','EKG is a procedure (CPT), not a diagnosis code.')">EKG diagnostic procedure</button>
     </div>
     <div class="fb" id="q3a-fb"></div>
   </div>
@@ -583,9 +595,9 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
   <div class="quiz" id="q3b">
     <h4>Scenario: Assessment states "Acute sinusitis." Patient also complains of headache and nasal congestion. What should the coder code?</h4>
     <div class="opts">
-      <button class="opt" onclick="chk(this,true,'q3b','Correct! Acute sinusitis is the confirmed diagnosis. Headache and nasal congestion are integral symptoms and are generally NOT coded separately.')">Only acute sinusitis</button>
+      <button class="opt" onclick="chk(this,true,'q3b','Correct! Acute sinusitis is the confirmed diagnosis. Headache and nasal congestion are integral symptoms and are generally NOT coded separately.')">Only acute sinusitis diagnosis</button>
       <button class="opt" onclick="chk(this,false,'q3b','When a confirmed diagnosis explains the symptoms, the symptoms are generally not coded separately.')">Sinusitis + headache + congestion</button>
-      <button class="opt" onclick="chk(this,false,'q3b','Headache alone is a symptom. The confirmed diagnosis (sinusitis) should be coded.')">Only headache</button>
+      <button class="opt" onclick="chk(this,false,'q3b','Headache alone is a symptom. The confirmed diagnosis (sinusitis) should be coded.')">Only headache symptom code</button>
     </div>
     <div class="fb" id="q3b-fb"></div>
   </div>
@@ -593,10 +605,10 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
   <div class="quiz" id="q3c">
     <h4>Which item on the CMS-1500 links the diagnosis to the procedure?</h4>
     <div class="opts">
-      <button class="opt" onclick="chk(this,false,'q3c','Item 21 is where diagnosis codes are listed, but it doesn\'t link them to procedures.')">Item 21</button>
-      <button class="opt" onclick="chk(this,false,'q3c','Item 24D is where procedures/services are listed.')">Item 24D</button>
-      <button class="opt" onclick="chk(this,true,'q3c','Correct! Item 24E contains the diagnosis pointer — a letter (A, B, C, D, etc.) that links each service line back to the diagnosis in Item 21.')">Item 24E</button>
-      <button class="opt" onclick="chk(this,false,'q3c','Item 24J identifies the rendering provider.')">Item 24J</button>
+      <button class="opt" onclick="chk(this,false,'q3c','Item 21 is where diagnosis codes are listed, but it doesn\'t link them to procedures.')">Item 21 — diagnosis code area</button>
+      <button class="opt" onclick="chk(this,false,'q3c','Item 24D is where procedures/services are listed.')">Item 24D — procedure code area</button>
+      <button class="opt" onclick="chk(this,true,'q3c','Correct! Item 24E contains the diagnosis pointer — a letter (A, B, C, D, etc.) that links each service line back to the diagnosis in Item 21.')">Item 24E — diagnosis pointer area</button>
+      <button class="opt" onclick="chk(this,false,'q3c','Item 24J identifies the rendering provider.')">Item 24J — rendering provider area</button>
     </div>
     <div class="fb" id="q3c-fb"></div>
   </div>
@@ -658,10 +670,10 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
   <div class="quiz" id="q4a">
     <h4>After looking up "acute pharyngitis" in the Index and verifying in the Tabular, which code is correct for acute pharyngitis, unspecified?</h4>
     <div class="opts">
-      <button class="opt" onclick="chk(this,false,'q4a','J31.2 is chronic pharyngitis, not acute.')">J31.2</button>
-      <button class="opt" onclick="chk(this,true,'q4a','Correct! J02.9 is the code for acute pharyngitis, unspecified. You found it in the Index and verified in the Tabular.')">J02.9</button>
-      <button class="opt" onclick="chk(this,false,'q4a','J02.0 is specifically streptococcal pharyngitis. Use this only if strep is confirmed.')">J02.0</button>
-      <button class="opt" onclick="chk(this,false,'q4a','J06.9 is for upper respiratory infection, not specifically pharyngitis.')">J06.9</button>
+      <button class="opt" onclick="chk(this,false,'q4a','J31.2 is chronic pharyngitis, not acute.')">J31.2 — chronic throat condition</button>
+      <button class="opt" onclick="chk(this,true,'q4a','Correct! J02.9 is the code for acute pharyngitis, unspecified. You found it in the Index and verified in the Tabular.')">J02.9 — acute pharyngitis code</button>
+      <button class="opt" onclick="chk(this,false,'q4a','J02.0 is specifically streptococcal pharyngitis. Use this only if strep is confirmed.')">J02.0 — streptococcal throat code</button>
+      <button class="opt" onclick="chk(this,false,'q4a','J06.9 is for upper respiratory infection, not specifically pharyngitis.')">J06.9 — unspecified URI code</button>
     </div>
     <div class="fb" id="q4a-fb"></div>
   </div>
@@ -683,13 +695,13 @@ body{font-family:var(--bd);background:var(--bg);color:var(--tx);line-height:1.7;
 <div class="pnl" id="p5">
   <div class="sh blue">
     <h2>CMS-1500 Practice Form</h2>
-    <p>Learn the most important fields by filling out a practice claim form. Click each field for a tooltip explaining what goes there.</p>
+    <p>Learn the most important fields by filling out a practice claim form. Fill the form first; the answer key appears only after submission.</p>
   </div>
   <div class="sprog"><span class="sprog-lbl">Progress</span><div class="sprog-bar"><div class="sprog-fill" id="prog5" style="width:0%"></div></div><span class="sprog-pct" id="pct5">0%</span></div>
 
   <div class="clt info">
     <div class="clt-lbl">Instructions</div>
-    <p>Use the patient information and SOAP note below to fill out the CMS-1500 practice form. Click any field to see a tooltip explaining what belongs there.</p>
+    <p>Use the patient information and SOAP note below to fill out the CMS-1500 practice form. Use the case details to complete the form. Field-level answer hints are hidden until you submit.</p>
   </div>
 
   <!-- Patient Info for Form -->
@@ -1007,10 +1019,12 @@ function chk(btn,correct,qid,rationale){
   const par=btn.parentElement;
   const fb=document.getElementById(qid+'-fb');
   par.querySelectorAll('.opt').forEach(o=>{o.classList.add('dis')});
+  const correctBtn=[...par.querySelectorAll('.opt')].find(o=>/chk\(this,true/.test(o.getAttribute('onclick')||''));
+  if(correctBtn)correctBtn.classList.add('cor');
   if(correct){
-    btn.classList.add('cor');fb.className='fb cor';fb.textContent=rationale;addPts(10);addStreak()
+    btn.classList.add('cor');fb.className='fb cor';fb.innerHTML=rationale;addPts(10);addStreak()
   }else{
-    btn.classList.add('inc');fb.className='fb inc';fb.textContent=rationale;resetStreak();sndNo()
+    btn.classList.add('inc');fb.className='fb inc';fb.innerHTML=rationale+(correctBtn?`<div class="correct-answer-note">Correct answer: ${correctBtn.textContent.trim()}</div>`:'');resetStreak();sndNo()
   }
 }
 
@@ -1056,31 +1070,42 @@ function checkFields(fields){
   return{correct,total}
 }
 
-function checkCMS(){
-  const r=checkFields(['f1a','f2','f3','f3s','f5','f11','f4','f21a','f21b','f24a','f24b','f24d','f24e','f24j','f33','f33a']);
-  const el=document.getElementById('cmsResult');
-  el.style.display='block';
-  if(r.correct>=r.total-1){
-    el.innerHTML=`<div class="clt tip"><div class="clt-lbl">🎉 Excellent!</div>You got ${r.correct}/${r.total} fields correct! You've demonstrated strong CMS-1500 knowledge.</div>`;addPts(25)
-  }else{
-    el.innerHTML=`<div class="clt warn"><div class="clt-lbl">Keep Practicing</div>You got ${r.correct}/${r.total} fields correct. Red fields need correction. Click each field to see the tooltip hint.</div>`
-  }
+function buildAnswerKeyTable(fields){
+  const rows=fields.map(id=>{
+    const el=document.getElementById(id); if(!el)return '';
+    const label=(el.closest('.cms-field')?.querySelector('label')?.textContent || el.getAttribute('placeholder') || id).trim();
+    const ans=(el.dataset.ans||'').trim();
+    const shown=ans===''?'Leave blank / not applicable':ans;
+    return `<tr><td>${label}</td><td>${shown}</td><td>${id}</td></tr>`;
+  }).join('');
+  return `<table class="answer-key-table"><thead><tr><th>Field</th><th>Correct Answer</th><th>Field ID</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
+function checkCMS(){
+  const fields=['f1a','f2','f3','f3s','f5','f11','f4','f21a','f21b','f24a','f24b','f24d','f24e','f24j','f33','f33a'];
+  const r=checkFields(fields);
+  const el=document.getElementById('cmsResult');
+  el.style.display='block';
+  const status=r.correct>=r.total-1
+    ? `<div class="clt tip"><div class="clt-lbl">Submission Result</div>${r.correct}/${r.total} fields correct. Strong CMS-1500 workflow.</div>`
+    : `<div class="clt warn"><div class="clt-lbl">Submission Result</div>${r.correct}/${r.total} fields correct. Review the complete answer key below.</div>`;
+  el.innerHTML=status+`<div class="cd"><h3>CMS-1500 Answer Key</h3>${buildAnswerKeyTable(fields)}</div>`;
+  if(r.correct>=r.total-1)addPts(25);
+}
 function checkCMSMulti(){
   const pt=patients[curPt];
   const ids=pt.formFields.map(f=>f.id);
   const r=checkFields(ids);
   const el=document.getElementById('mpResult');
   el.style.display='block';
-  if(r.correct>=r.total-1){
-    el.innerHTML=`<div class="clt tip"><div class="clt-lbl">🎉 Excellent!</div>${r.correct}/${r.total} fields correct! Patient ${pt.label} claim completed successfully.</div>`;
-    if(!ptCompleted.has(curPt)){ptCompleted.add(curPt);addPts(30);document.getElementById('ptDone'+curPt).innerHTML='<span class="bg bg-g">✓ Done</span>';document.getElementById('pct6').textContent=ptCompleted.size+'/4';document.getElementById('prog6').style.width=(ptCompleted.size/4*100)+'%'}
-  }else{
-    el.innerHTML=`<div class="clt warn"><div class="clt-lbl">Review Needed</div>${r.correct}/${r.total} correct. Red fields need correction — click each for tooltip help.</div>`
+  const status=r.correct>=r.total-1
+    ? `<div class="clt tip"><div class="clt-lbl">Submission Result</div>${r.correct}/${r.total} fields correct for Patient ${pt.label}.</div>`
+    : `<div class="clt warn"><div class="clt-lbl">Submission Result</div>${r.correct}/${r.total} fields correct. Review the complete answer key below.</div>`;
+  el.innerHTML=status+`<div class="cd"><h3>Patient ${pt.label} Answer Key</h3>${buildAnswerKeyTable(ids)}</div>`;
+  if(r.correct>=r.total-1 && !ptCompleted.has(curPt)){
+    ptCompleted.add(curPt);addPts(30);document.getElementById('ptDone'+curPt).innerHTML='<span class="bg bg-g">✓ Done</span>';document.getElementById('pct6').textContent=ptCompleted.size+'/4';document.getElementById('prog6').style.width=(ptCompleted.size/4*100)+'%';
   }
 }
-
 // ===== PATIENT DATA =====
 const ptCompleted=new Set();
 let curPt=0;
@@ -1276,6 +1301,8 @@ const patients=[
   }
 ];
 
+function shuffledIndexed(arr){return arr.map((v,i)=>({v,i})).sort(()=>Math.random()-0.5)}
+
 // ===== RENDER PATIENT =====
 function loadPt(idx){
   curPt=idx;
@@ -1312,7 +1339,7 @@ function renderPtCard(){
 function renderPtSoap(){
   const p=patients[curPt];
   const qid='mpq1_'+curPt;
-  let optsHtml=p.quizOpts.map((o,i)=>`<button class="opt" onclick="chkMp(this,${i===p.quizAns},${i},'${qid}')">${o}</button>`).join('');
+  let optsHtml=shuffledIndexed(p.quizOpts).map(({v:o,i})=>`<button class="opt" onclick="chkMp(this,${i===p.quizAns},${i},'${qid}')">${o}</button>`).join('');
   document.getElementById('ptSoapArea').innerHTML=`
     <div class="soap-note">
       <p><span class="soap-lbl">S:</span> ${p.soap.s}</p>
@@ -1348,7 +1375,7 @@ function renderPtLookup(){
   });
 
   const lqid='mplq_'+curPt;
-  let lOptsHtml=p.lookupOpts.map((o,i)=>`<button class="opt" onclick="chkLk(this,${i===p.lookupAns},${i},'${lqid}')">${o}</button>`).join('');
+  let lOptsHtml=shuffledIndexed(p.lookupOpts).map(({v:o,i})=>`<button class="opt" onclick="chkLk(this,${i===p.lookupAns},${i},'${lqid}')">${o}</button>`).join('');
 
   document.getElementById('ptLookupArea').innerHTML=`
     <div class="icd-panel">
@@ -1487,16 +1514,16 @@ function compSec(i){
 
 // ===== CHALLENGE MODE =====
 const chalQs=[
-  {q:'Which code set supports medical necessity on a CMS-1500?',opts:['CPT','ICD-10-CM','HCPCS Level II','ICD-10-PCS'],ans:1},
-  {q:'Where do diagnosis codes go on the CMS-1500?',opts:['Item 24D','Item 24E','Item 21','Item 33'],ans:2},
-  {q:'Where do CPT/HCPCS procedure codes go?',opts:['Item 21','Item 24D','Item 24J','Item 33'],ans:1},
-  {q:'What does the diagnosis pointer in Item 24E do?',opts:['Lists the diagnosis code','Links the service to its diagnosis','Identifies the rendering provider','Shows the place of service'],ans:1},
-  {q:'Item 24J identifies which provider?',opts:['Billing provider','Referring provider','Rendering provider','Supervising provider'],ans:2},
-  {q:'In outpatient, how do you code a "rule out" condition?',opts:['Code it as confirmed','Code the symptom instead','Don\'t code anything','Use ICD-10-PCS'],ans:1},
-  {q:'The Assessment section of a SOAP note contains:',opts:['Patient complaints','Test results','The diagnosis','Treatment plan'],ans:2},
-  {q:'When a confirmed diagnosis explains a symptom, should you code the symptom separately?',opts:['Yes, always','No, generally not','Only if the patient asks','Only on Tuesdays'],ans:1},
-  {q:'ICD-10-PCS is used for:',opts:['Outpatient coding','Professional claims','Hospital inpatient procedures','Diagnosis coding'],ans:2},
-  {q:'The billing provider is typically:',opts:['The nurse','The individual doctor only','The practice or facility submitting the claim','The insurance company'],ans:2}
+  {q:'Which code set supports medical necessity on a CMS-1500?',opts:['CPT procedure codes','ICD-10-CM diagnosis codes','HCPCS Level II supplies','ICD-10-PCS inpatient codes'],ans:1},
+  {q:'Where do diagnosis codes go on the CMS-1500?',opts:['Item 24D service line','Item 24E diagnosis pointer','Item 21 diagnosis area','Item 33 billing provider'],ans:2},
+  {q:'Where do CPT/HCPCS procedure codes go?',opts:['Item 21 diagnosis area','Item 24D procedure area','Item 24J rendering provider','Item 33 billing provider'],ans:1},
+  {q:'What does the diagnosis pointer in Item 24E do?',opts:['Lists diagnosis code only','Links service to diagnosis','Identifies rendering provider','Shows place of service code'],ans:1},
+  {q:'Item 24J identifies which provider?',opts:['Billing provider entity','Referring provider source','Rendering provider clinician','Supervising provider clinician'],ans:2},
+  {q:'In outpatient, how do you code a "rule out" condition?',opts:['Code it as confirmed diagnosis','Code the documented symptom','Do not code the encounter','Use ICD-10-PCS instead'],ans:1},
+  {q:'The Assessment section of a SOAP note contains:',opts:['Patient-reported complaints','Objective test results','Provider diagnosis/impression','Treatment and follow-up plan'],ans:2},
+  {q:'When a confirmed diagnosis explains a symptom, should you code the symptom separately?',opts:['Yes; always code symptoms','No; generally not separately','Only if patient requests it','Only on a specific weekday'],ans:1},
+  {q:'ICD-10-PCS is used for:',opts:['Outpatient procedure coding','Professional claim coding','Hospital inpatient procedures','Diagnosis coding workflow'],ans:2},
+  {q:'The billing provider is typically:',opts:['The nurse documenting vitals','The individual doctor only','The practice or facility billing','The insurance company payer'],ans:2}
 ];
 let chalIdx=0,chalCorrect=0,chalTimerInt=null;
 
@@ -1525,7 +1552,7 @@ function showChalQ(){
   const optsDiv=document.getElementById('cqOpts');
   optsDiv.innerHTML='';
   document.getElementById('cq-fb').className='fb';document.getElementById('cq-fb').textContent='';
-  q.opts.forEach((o,i)=>{
+  shuffledIndexed(q.opts).forEach(({v:o,i})=>{
     const btn=document.createElement('button');btn.className='opt';btn.textContent=o;
     btn.onclick=()=>chalAnswer(i);
     optsDiv.appendChild(btn)
@@ -1569,6 +1596,21 @@ function toggleMobStats(){const s=document.querySelector('.hdr-stats');if(s)s.st
 const style=document.createElement('style');
 style.textContent='@keyframes pulse{0%,100%{box-shadow:0 4px 14px rgba(21,101,192,.25)}50%{box-shadow:0 4px 28px rgba(21,101,192,.45)}}';
 document.head.appendChild(style);
+
+
+// ===== UNBIASED OPTION ORDER + HIDE LIVE ANSWERS PATCH =====
+function shuffleChildren(container){
+  const nodes=[...container.children];
+  for(let i=nodes.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    container.appendChild(nodes[j]);
+    nodes.splice(j,1);
+  }
+}
+function shuffleStaticQuizOptions(){document.querySelectorAll('.opts').forEach(shuffleChildren)}
+function removeLiveCmsHints(){document.querySelectorAll('.cms-field .tip').forEach(t=>t.remove())}
+document.addEventListener('DOMContentLoaded',()=>{shuffleStaticQuizOptions();removeLiveCmsHints()});
+
 </script>
 </body>
 </html>
